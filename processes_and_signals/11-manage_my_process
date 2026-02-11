@@ -18,8 +18,15 @@ stop() {
 }
 
 restart() {
-  stop
-  start
+  # Silent stop
+  if [ -f "$PID_FILE" ]; then
+    kill "$(cat "$PID_FILE")"
+    rm "$PID_FILE"
+  fi
+  # Silent start
+  ./manage_my_process &
+  echo $! > "$PID_FILE"
+  # Only print restart message
   echo "manage_my_process restarted"
 }
 
